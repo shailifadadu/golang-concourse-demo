@@ -1,0 +1,31 @@
+# Resources - external resource here is our Github repo
+resources:
+
+  # Name that concourse will use to refer to our github repo
+  - name: source-code
+
+    type: git
+
+    source:
+
+      # your github repo
+      uri: https://github.com/shailifadadu/golang-concourse-demo.git
+      # Branch that concourse should monitor
+      branch: main
+
+# JOBS - a piece of CI/CD work
+jobs:
+  - name: test
+
+  # PLAN - defines the sequence of steps that Concourse executes for this job.
+    plan:
+
+    # GET - Download/fetch the current version of our GitHub repository. 
+    # "source-code" is the resource we defined above.
+    - get: source-code
+      trigger: true
+
+    # TASK - Execute the test task
+    - task: run-tests
+      file: source-code/ci/tasks/test.yml
+

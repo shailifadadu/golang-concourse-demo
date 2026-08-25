@@ -1,0 +1,37 @@
+#platform on which this task should run
+platform: linux
+
+#container image in which this task will execute
+image_resource:
+  type: registry-image
+
+  source:
+    #Docker Hub image
+    repository: golang
+
+    #Go version used for CI test environment
+    tag: "1.26-alpine"
+
+#Inputs - we will define this input in pipeline.yml using : get: source-code
+inputs:
+  - name: source-code
+
+#Command to execute
+run:
+  path: sh
+
+  args:
+    - -exc
+    - |
+      #Move into github repo
+      cd source-code
+
+      #Display Go version used by CI
+      echo "Go version"
+      go version
+
+      #Run all Go tests
+      echo "Running Go tests..."
+      go test ./...
+
+      echo "All tests passed!"
